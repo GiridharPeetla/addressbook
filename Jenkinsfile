@@ -9,7 +9,7 @@ pipeline{
             agent {label 'linux_slave'}
             steps{
                 script{
-                    echo "Compiling the code"
+                    echo "compiling the code"
                     sh 'mvn compile'
                 }
             }
@@ -28,8 +28,8 @@ pipeline{
                 }
             }
         }
-         stage("PACKAGE"){
-             agent {label 'linux_slave'}
+        stage("PACKAGE"){
+            agent {label 'linux_slave'}
             steps{
                 script{
                     echo "Packaging the code"
@@ -37,7 +37,7 @@ pipeline{
                 }
             }
         }
-         stage("DEPLOY"){
+        stage("DEPLOY"){
             agent any
             steps{
                 script{
