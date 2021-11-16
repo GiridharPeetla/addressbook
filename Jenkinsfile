@@ -37,7 +37,7 @@ pipeline{
                 }
             }
         }
-         stage("PACKAGE"){
+        stage("PACKAGE"){
              agent {label 'linux_slave'}
             when{
                 expression{
@@ -51,7 +51,25 @@ pipeline{
                 }
             }
         }
-         stage("DEPLOY"){
+        stage("BUILD THE DOCKER IMAGE"){
+            agent any
+             when{
+                 expression{
+                     BRANCH_NAME == 'master'
+                }
+            }
+            steps{
+                script{
+                    echo "BUILDING THE DOCKER IMAGE"
+                    echo "Deploying version ${params.VERSION}"
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh 'sudo docker build -t giridharpeetla/giri-repoprivate:$BUILD_NUMBER .'
+                        sh 'sudo docker login -u $USER -p $PASS'
+                        sh 'sudo docker push giridharpeetla/giri-repoprivate:$BUILD_NUMBER'
+                }
+            }
+        }
+        stage("DEPLOY"){
             agent any
              when{
                  expression{
@@ -63,7 +81,7 @@ pipeline{
                     echo "Deploying the app"
                     echo "Deploying version ${params.VERSION}"
                 }
-            }
+           }
         }
     }
 }
