@@ -10,7 +10,7 @@ pipeline{
     }
     stages{
         stage("COMPILE"){
-            agent {label 'linux_slave'}
+            agent any
             steps{
                 script{
                     echo "Compiling the code"
@@ -38,7 +38,7 @@ pipeline{
             }
         }
         stage("PACKAGE"){
-             agent {label 'linux_slave'}
+             agent any
             when{
                 expression{
                     BRANCH_NAME == 'master'
